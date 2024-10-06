@@ -10,7 +10,7 @@ import (
 )
 
 type Manifest struct {
-	Api      string     `yaml:"apiVersion"`
+	API      string     `yaml:"apiVersion"`
 	Kind     string     `yaml:"kind"`
 	Metadata ObjectMeta `yaml:"metadata"`
 	Spec     PodSpec    `yaml:"spec"`
@@ -41,7 +41,7 @@ type ContainerPort struct {
 }
 
 type Probe struct {
-	HttpGet HTTPGetAction `yaml:"httpGet"`
+	HTTPGet HTTPGetAction `yaml:"httpGet"`
 }
 
 type HTTPGetAction struct {
