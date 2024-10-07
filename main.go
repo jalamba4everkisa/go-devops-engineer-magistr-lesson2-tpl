@@ -9,7 +9,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-type Manifest struct {
+type Root struct {
 	API      string     `yaml:"apiVersion"`
 	Kind     string     `yaml:"kind"`
 	Metadata ObjectMeta `yaml:"metadata"`
@@ -63,13 +63,28 @@ type Limits struct {
 }
 
 func main() {
-	var manifest Manifest
+
+	var manifest yaml.Node
 	yamlFile, err := os.ReadFile("test.yaml")
 	if err != nil {
 		panic(err)
 	}
 	err = yaml.Unmarshal(yamlFile, &manifest)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Printf("cannot unmarshal file content: %w", err)
 	}
+	for _, doc := range manifest.Content {
+		readValues(*doc)
+	}
+}
+
+func readValues(m yaml.Node) {
+
+	for _, data := range m.Content {
+		if data.Value != "" {
+			fmt.Printf("line: %d, value: %s\n", data.Line, data.Value)
+		}
+		readValues(*data)
+	}
+
 }
