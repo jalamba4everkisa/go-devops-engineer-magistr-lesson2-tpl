@@ -1,3 +1,4 @@
+apiVersion: v1234
 kind: Pod
 metadata:
   name: mypod

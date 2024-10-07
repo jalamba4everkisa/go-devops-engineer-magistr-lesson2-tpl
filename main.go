@@ -9,63 +9,12 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-type Root struct {
-	API      string     `yaml:"apiVersion"`
-	Kind     string     `yaml:"kind"`
-	Metadata ObjectMeta `yaml:"metadata"`
-	Spec     PodSpec    `yaml:"spec"`
-}
-
-type ObjectMeta struct {
-	Name      string            `yaml:"name"`
-	Namespace string            `yaml:"namespace,omitempty"`
-	Labels    map[string]string `yaml:"labels,omitempty"`
-}
-
-type PodSpec struct {
-	PodOS      string      `yaml:"os,omitempty"`
-	Containers []Container `yaml:"containers"`
-}
-
-type Container struct {
-	Name          string              `yaml:"name"`
-	Image         string              `yaml:"image"`
-	Ports         []ContainerPort     `yaml:"ports,omitempty"`
-	ReadnessProbe Probe               `yaml:"readinessProbe,omitempty"`
-	LivenessProbe Probe               `yaml:"livenessProbe,omitempty"`
-	Resources     ResourceRequrements `yaml:"resources,omitempty"`
-}
-type ContainerPort struct {
-	Port     int    `yaml:"containerPort"`
-	Protocol string `yaml:"protocol,omitempty"`
-}
-
-type Probe struct {
-	HTTPGet HTTPGetAction `yaml:"httpGet"`
-}
-
-type HTTPGetAction struct {
-	Path string `yaml:"path"`
-	Port int    `yaml:"port"`
-}
-type ResourceRequrements struct {
-	Requests Requests `yaml:"requests"`
-	Limits   Limits   `yaml:"limits"`
-}
-
-type Requests struct {
-	CPU    int    `yaml:"cpu"`
-	Memory string `yaml:"memory"`
-}
-type Limits struct {
-	CPU    int    `yaml:"cpu"`
-	Memory string `yaml:"memory"`
-}
+var file = "./test.yaml"
 
 func main() {
 
 	var manifest yaml.Node
-	yamlFile, err := os.ReadFile("test.yaml")
+	yamlFile, err := os.ReadFile(file)
 	if err != nil {
 		panic(err)
 	}
@@ -73,18 +22,15 @@ func main() {
 	if err != nil {
 		fmt.Printf("cannot unmarshal file content: %w", err)
 	}
-	for _, doc := range manifest.Content {
-		readValues(*doc)
-	}
+	readValues(manifest)
 }
 
 func readValues(m yaml.Node) {
-
 	for _, data := range m.Content {
+
 		if data.Value != "" {
 			fmt.Printf("line: %d, value: %s\n", data.Line, data.Value)
 		}
 		readValues(*data)
 	}
-
 }
