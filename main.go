@@ -20,7 +20,7 @@ func main() {
 	}
 	err = yaml.Unmarshal(yamlFile, &manifest)
 	if err != nil {
-		fmt.Printf("cannot unmarshal file content: %w", err)
+		fmt.Printf("cannot unmarshal file content: %v", err)
 	}
 	readValues(manifest)
 }
